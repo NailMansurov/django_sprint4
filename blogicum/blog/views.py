@@ -1,7 +1,4 @@
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
-from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.views.generic import (
     CreateView, DeleteView, DetailView, ListView, UpdateView
@@ -14,22 +11,8 @@ from .mixins import (
     CreateUpdateComment, CreateUpdatePost, PostMixin, CommentMixin,
     OnlyAuthorMixin
 )
-from .models import Category, Comment, Post
-
-
-User = get_user_model()
-
-
-def count_comments(queryset):
-    comment_count = Count('comments')
-    return queryset.annotate(comment_count=comment_count)
-
-
-def paginate_queryset(request, queryset, page_size):
-    paginator = Paginator(queryset, page_size)
-    page_number = request.GET.get('page')
-    queryset = paginator.get_page(page_number)
-    return queryset
+from .models import Category, Comment, Post, User
+from .utils import count_comments, paginate_queryset
 
 
 class IndexListView(ListView):
